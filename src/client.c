@@ -48,7 +48,7 @@ static void	close_client(client_t *client)
 	if (client == client->server->last)
 		client->server->last = client->prev;
 	if (client->current)
-		free(client->current);
+		delete_paths(client->current);
 	if (client->data)
 		client->data->cdel(client->data);
 	free(client);
@@ -65,6 +65,9 @@ static void	handle_packet_c(client_t *client)
 		return;
 	}
 	buff[len - 1] = 0;
+	for (int i = 0;buff[i];i += 1)
+		if (buff[i] == '\n' || buff[i] == '\r')
+			buff[i] = 0;
 	printf("Packet: %s\n", buff);
 	handle_command(client->server, client, buff);
 }

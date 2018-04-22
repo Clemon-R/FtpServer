@@ -49,13 +49,14 @@ typedef struct	server_s
 			, enum SERVER_TYPE);
 	void	(*cdel)(struct server_s *server);
 
-	int	(*set_port)(struct server_s *server, unsigned int port);
+	int	(*set_port)(struct server_s *server, unsigned int port
+				, const char *ip);
 	int	(*start)(struct server_s *server);
 }		server_t;
 
 server_t	*init_server();
 
-int	set_port(server_t *server, unsigned int port);
+int	set_port(server_t *server, unsigned int port, const char *ip);
 int	create_socket(server_t *server, char *root, enum SERVER_TYPE);
 void	close_socket(server_t *server);
 int	start_server(server_t *server);

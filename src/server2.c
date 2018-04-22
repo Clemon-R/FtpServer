@@ -6,6 +6,8 @@
 */
 
 #include "server.h"
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 int	start_server(server_t *server)
 {
@@ -46,7 +48,8 @@ void	close_socket(server_t *server)
 	}
 	if (server->fd != -1)
 		close(server->fd);
-	free(server->list);
+	if (server->type == HOST)
+		free(server->list);
 	free(server);
 }
 
@@ -68,13 +71,16 @@ int	create_socket(server_t *server, char *root, enum SERVER_TYPE type)
 	, (char *)&opt, sizeof(opt)) == -1)
 		return (-1);
 	printf("Socket created\n");
-	server->root = root;
 	server->type = type;
-	server->data_port = 1024;
+	if (type == HOST){
+		server->list = get_list();
+		server->data_port = 1024;
+		server->root = root;
+	}
 	return (server->fd);
 }
 
-int	set_port(server_t *server, unsigned int port)
+int	set_port(server_t *server, unsigned int port, const char *ip)
 {
 	int			result;
 
@@ -83,7 +89,7 @@ int	set_port(server_t *server, unsigned int port)
 		return (1);
 	server->s_in.sin_family = AF_INET;
 	server->s_in.sin_port = htons(port);
-	server->s_in.sin_addr.s_addr = INADDR_ANY;
+	server->s_in.sin_addr.s_addr = inet_addr(ip);
 	printf("Setting the port...\n");
 	result = bind(server->fd
 	, (struct sockaddr *)&server->s_in, sizeof(server->s_in));
@@ -92,8 +98,6 @@ int	set_port(server_t *server, unsigned int port)
 	printf("The port has been set\n");
 	return (0);
 }
-
-
 
 server_t	*init_server(void)
 {
@@ -109,6 +113,5 @@ server_t	*init_server(void)
 	server->last = 0;
 	server->current = 0;
 	server->root = 0;
-	server->list = get_list();
 	return (server);
 }

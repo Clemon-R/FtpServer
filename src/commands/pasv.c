@@ -30,7 +30,9 @@ static void	set_server(server_t *server, client_t *client)
 	server->cnew(server, 0, DATA);
 	while (result){
 		client->server->data_port += 1;
-		result = server->set_port(server, client->server->data_port);
+		result = server->set_port(server
+					, client->server->data_port
+					, "0.0.0.0");
 	}
 	server->start(server);
 }

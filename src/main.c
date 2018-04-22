@@ -47,7 +47,7 @@ int	main(int argc, char **argv)
 	if (!server)
 		return (84);
 	server->cnew(server, argv[2], HOST);
-	server->set_port(server, atoi(argv[1]));
+	server->set_port(server, atoi(argv[1]), "0.0.0.0");
 	server->start(server);
 	server->cdel(server);
 	return (0);

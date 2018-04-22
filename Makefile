@@ -26,6 +26,7 @@ SRC	+=	$(addprefix src/commands/,	\
 		list.c	\
 		retr.c	\
 		port.c	\
+		stor.c	\
 		noop.c)
 
 OBJ	=	$(SRC:.c=.o)

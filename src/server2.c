@@ -57,9 +57,6 @@ int	create_socket(server_t *server, char *root, enum SERVER_TYPE type)
 {
 	int	opt = 1;
 
-	if (!server)
-		return (-1);
-	printf("Get the proto for TCP\n");
 	server->pe = getprotobyname("TCP");
 	if (!server->pe)
 		return (-1);
@@ -113,5 +110,6 @@ server_t	*init_server(void)
 	server->last = 0;
 	server->current = 0;
 	server->root = 0;
+	server->parent = 0;
 	return (server);
 }

@@ -33,6 +33,7 @@ typedef struct	client_s
 	void	(*handle_packet)(struct client_s *client);
 
 	path_t		*current;
+	char		*file;
 
 	server_t	*server;
 	account_t	account;
@@ -42,5 +43,6 @@ typedef struct	client_s
 }		client_t;
 
 client_t	*init_client(server_t *server, client_t *client);
+void	reception_file(client_t *client);
 
 #endif /* !CLIENT_H_ */

@@ -8,7 +8,7 @@
 #ifndef COMMAND_H_
 	#define COMMAND_H_
 
-	#define	NBR_COMMANDS	13
+	#define	NBR_COMMANDS	14
 
 	#include "server.h"
 	#include "client.h"

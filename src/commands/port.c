@@ -67,8 +67,9 @@ void	port(client_t *client, const char *argv)
 
 	if (!argv || !*argv || !ip)
 		return;
+	if (client->data)
+		client->data->cdel(client->data);
 	port = get_port(ip, argv);
-	printf("Creating server data ACTIVE\n");
 	server = creating_server(ip, port);
 	if (ip)
 		free(ip);
@@ -76,7 +77,7 @@ void	port(client_t *client, const char *argv)
 	, (struct sockaddr *)&server->s_in, sizeof(server->s_in)) == -1)
 		return;
 	handle_client(server, server->fd, &server->s_in);
-	server->fd = -1;
 	client->data = server;
+	server->parent = client;
 	write(client->fd, "200 Server connected\n", 21);
 }

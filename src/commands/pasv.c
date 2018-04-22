@@ -52,6 +52,7 @@ void	pasv(client_t *client, const char *argv)
 	}
 	set_server(server, client);
 	client->data = server;
+	server->parent = client;
 	set_msg(buff, client);
 	write(client->fd, buff, strlen(buff));
 }

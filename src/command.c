@@ -23,6 +23,9 @@ static void		set_list2(command_t *list)
 	list[12].name = "port";
 	list[12].log = 1;
 	list[12].function = &port;
+	list[13].name = "stor";
+	list[13].log = 1;
+	list[13].function = &stor;
 }
 
 static void		set_list1(command_t *list)

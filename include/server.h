@@ -42,6 +42,7 @@ typedef struct	server_s
 
 	client_t		*current;
 	client_t		*last;
+	client_t		*parent;
 
 	command_t		*list;
 

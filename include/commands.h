@@ -28,5 +28,6 @@ void	pasv(client_t *client, const char *argv);
 void	list(client_t *client, const char *argv);
 void	retr(client_t *client, const char *argv);
 void	port(client_t *client, const char *argv);
+void	stor(client_t *client, const char *argv);
 
 #endif /* !COMMANDS_H_ */

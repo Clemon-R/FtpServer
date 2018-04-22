@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <fcntl.h>
 
 static void	init_account(client_t *client)
 {
@@ -89,4 +90,26 @@ client_t	*init_client(server_t *server, client_t *last)
 	if (last)
 		last->next = client;
 	return (client);
+}
+
+void	reception_file(client_t *client)
+{
+	char	buff[1025];
+	int	len;
+	int	fd;
+	char	*msg = "226 File transfered\n";
+
+	len = read(client->fd, &buff, 1024);
+	if (len == 0){
+		write(client->server->parent->fd, msg, strlen(msg));
+		client->server->parent->data = 0;
+		client->server->cdel(client->server);
+		return;
+	}
+	buff[len] = 0;
+	fd = open(client->file, O_WRONLY | O_APPEND | O_CREAT, 0644);
+	if (fd == -1)
+		return;
+	write(fd, buff, len);
+	close(fd);
 }

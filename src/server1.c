@@ -70,18 +70,15 @@ void	handle_packet_s(server_t *server, fd_set *readfts)
 {
 	client_t	*current = server->current;
 	client_t	*next;
-	client_t	*prev;
-	char		deco;
 
 	while (current != 0){
-		deco = 0;
 		next = current->next;
-		prev = current->prev;
 		if (current->data && !current->data->current
-		&& FD_ISSET(current->data->fd, readfts)){
-			printf("Server data\n");
+		&& FD_ISSET(current->data->fd, readfts))
 			handle_main(current->data);
-		}
+		else if (current->data && current->data->current
+		&& FD_ISSET(current->data->fd, readfts))
+			reception_file(current->data->current);
 		if (FD_ISSET(current->fd, readfts)){
 			printf("Client %d\n", current->fd);
 			current->handle_packet(current);

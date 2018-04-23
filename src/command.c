@@ -82,11 +82,9 @@ void	handle_command(server_t *server, client_t *client, char *buff)
 
 	strncpy(command, buff, pos > 4 ? 0 : pos);
 	command[pos > 4 ? 0 : pos] = 0;
-	for (int i = 0;command[i];i++)
-		command[i] = tolower(command[i]);
 	printf("Command (%s) : %s\n", command, arg);
 	for (int i = 0;i < NBR_COMMANDS;i++){
-		if (strcmp(server->list[i].name, command) == 0
+		if (strcasecmp(server->list[i].name, command) == 0
 		&& server->list[i].log <= client->account.logged){
 			(*server->list[i].function)(client, arg);
 			return;

@@ -44,7 +44,6 @@ void	set_fdset(server_t *server, fd_set *readfts)
 	FD_ZERO(readfts);
 	FD_SET(server->fd, readfts);
 	while (current != 0){
-		printf("Adding %d\n", current->fd);
 		FD_SET(current->fd, readfts);
 		if (current->data)
 			FD_SET(current->data->fd, readfts);

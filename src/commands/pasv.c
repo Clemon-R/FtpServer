@@ -13,11 +13,11 @@
 static void	set_msg(char *buff, client_t *client)
 {
 	char	*ip;
+	unsigned int	port = ntohs(client->data->s_in.sin_port);
 
 	ip = inet_ntoa(client->server->s_in.sin_addr);
 	sprintf(buff, "227 Entering Passive Mode (%s,%d,%d)\n"
-		, ip, client->server->data_port / 256
-		, client->server->data_port % 256);
+		, ip, port / 256, port % 256);
 	for (int i = 0;buff[i];i++)
 		if (buff[i] == '.')
 			buff[i] = ',';
@@ -26,12 +26,14 @@ static void	set_msg(char *buff, client_t *client)
 static void	set_server(server_t *server, client_t *client)
 {
 	int		result = 1;
+	unsigned int	port = 1023;
 
 	server->cnew(server, 0, DATA);
 	while (result){
-		client->server->data_port += 1;
-		result = server->set_port(server
-					, client->server->data_port
+		port += 1;
+		if (ntohs(client->server->s_in.sin_port) != port)
+			result = server->set_port(server
+					, port
 					, "0.0.0.0");
 	}
 	server->start(server);

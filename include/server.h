@@ -36,7 +36,6 @@ typedef struct	server_s
 	struct protoent		*pe;
 	struct sockaddr_in	s_in;
 	enum SERVER_TYPE	type;
-	unsigned int		data_port;
 
 	char			*root;
 

@@ -8,30 +8,7 @@
 #include "server.h"
 #include <netinet/in.h>
 #include <arpa/inet.h>
-
-int	start_server(server_t *server)
-{
-	int	result;
-	fd_set			readfts;
-
-	printf("Trying to start the server\n");
-	if (!server || server->fd == -1)
-		return (1);
-	result = listen(server->fd, 100);
-	if (result == -1)
-		return (1);
-	if (server->type == DATA)
-		return (0);
-	printf("Server running...\n");
-	while (1){
-		set_fdset(server, &readfts);
-		select(get_the_highest_fd(server) + 1, &readfts, 0, 0, 0);
-		if (FD_ISSET(server->fd, &readfts))
-			handle_main(server);
-		handle_packet_s(server, &readfts);
-	}
-	return (result == -1);
-}
+#include <signal.h>
 
 void	close_socket(server_t *server)
 {
@@ -71,7 +48,6 @@ int	create_socket(server_t *server, char *root, enum SERVER_TYPE type)
 	server->type = type;
 	if (type == HOST){
 		server->list = get_list();
-		server->data_port = 1024;
 		server->root = root;
 	}
 	return (server->fd);
@@ -81,7 +57,6 @@ int	set_port(server_t *server, unsigned int port, const char *ip)
 {
 	int			result;
 
-	printf("Trying to set the port\n");
 	if (!server || server->fd == -1)
 		return (1);
 	server->s_in.sin_family = AF_INET;

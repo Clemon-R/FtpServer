@@ -50,6 +50,8 @@ static void	close_client(client_t *client)
 		client->server->last = client->prev;
 	if (client->current)
 		delete_paths(client->current);
+	if (client->file)
+		free(client->file);
 	if (client->data)
 		client->data->cdel(client->data);
 	free(client);

@@ -47,35 +47,42 @@ static unsigned int	get_port(const char *ip, const char *arg)
 	return (port);
 }
 
-static server_t	*creating_server(const char *ip, unsigned int port)
+static server_t	*creating_server(const char *arg)
 {
 	server_t	*server;
+	char		*ip = get_ip(arg);
+	unsigned int	port;
 
-	server = init_server();
-	if (!server)
+	if (!ip)
 		return (0);
+	port = get_port(ip, arg);
+	server = init_server();
+	if (!server){
+		free(ip);
+		return (0);
+	}
 	server->cnew(server, 0, DATA);
 	server->set_port(server, port, ip);
+	free(ip);
 	return (server);
 }
 
 void	port(client_t *client, const char *argv)
 {
-	char		*ip = get_ip(argv);
-	int		port;
 	server_t	*server;
 
-	if (!argv || !*argv || !ip)
+	if (!argv || !*argv){
+		write(client->fd, "550 Permission denied\n", 22);
 		return;
+	}
 	if (client->data)
 		client->data->cdel(client->data);
-	port = get_port(ip, argv);
-	server = creating_server(ip, port);
-	if (ip)
-		free(ip);
-	if (connect(server->fd
-	, (struct sockaddr *)&server->s_in, sizeof(server->s_in)) == -1)
+	server = creating_server(argv);
+	if (!server || connect(server->fd
+	, (struct sockaddr *)&server->s_in, sizeof(server->s_in)) == -1){
+		write(client->fd, "550 Permission denied\n", 22);
 		return;
+	}
 	handle_client(server, server->fd, &server->s_in);
 	client->data = server;
 	server->parent = client;

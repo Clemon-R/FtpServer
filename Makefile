@@ -8,6 +8,7 @@
 SRC	=	$(addprefix src/,	\
 		server1.c	\
 		server2.c	\
+		server3.c	\
 		client.c	\
 		command.c	\
 		directory.c	\

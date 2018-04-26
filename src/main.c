@@ -44,10 +44,15 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 	server = init_server();
-	if (!server)
+	if (!server){
+		fprintf(stderr, "Impossible to initialise server\n");
 		return (84);
+	}
 	server->cnew(server, argv[2], HOST);
-	server->set_port(server, atoi(argv[1]), "0.0.0.0");
+	if (server->set_port(server, atoi(argv[1]), "0.0.0.0")){
+		fprintf(stderr, "Port already use\n");
+		return(84);
+	}
 	server->start(server);
 	server->cdel(server);
 	return (0);

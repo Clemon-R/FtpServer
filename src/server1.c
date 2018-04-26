@@ -59,8 +59,11 @@ void	handle_main(server_t *server)
 
 	client_fd = accept(server->fd
 	, (struct sockaddr *)&s_client_in, &s_client_size);
-	if (client_fd == -1)
+	if (client_fd == -1){
+		server->cdel(server);
+		exit(EXIT_SUCCESS);
 		return;
+	}
 	printf("New client\n");
 	handle_client(server, client_fd, &s_client_in);
 }

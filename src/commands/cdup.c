@@ -9,7 +9,12 @@
 
 void	cdup(client_t *client, const char *argv)
 {
+	path_t	*tmp = client->current;
+
+	if (client->current){
+		client->current = client->current->parent;
+		delete_path(tmp);
+	}
 	char	*msg = "250 Path successfully changed\n";
-	client->current = 0;
 	write(client->fd, msg, strlen(msg));
 }

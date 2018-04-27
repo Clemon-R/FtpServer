@@ -97,20 +97,24 @@ client_t	*init_client(server_t *server, client_t *last)
 void	reception_file(client_t *client)
 {
 	char	buff[1025];
-	int	len;
-	int	fd;
+	int	len = 1;
+	int	fd = open(client->file, O_WRONLY | O_APPEND | O_CREAT, 0644);
 
-	len = read(client->fd, &buff, 1024);
-	if (len == 0){
-		write(client->server->parent->fd, "226 File transfered\n", 20);
-		client->server->parent->data = 0;
-		client->server->cdel(client->server);
+	if (fd == -1){
+		write(client->server->parent->fd, "250 Error file\n", 15);
 		return;
 	}
-	buff[len] = 0;
-	fd = open(client->file, O_WRONLY | O_APPEND | O_CREAT, 0644);
-	if (fd == -1)
-		return;
-	write(fd, buff, len);
+	while (len){
+		len = read(client->fd, &buff, 1024);
+		if (len == 0){
+			write(client->server->parent->fd
+			, "226 File transfered\n", 20);
+			client->server->parent->data = 0;
+			client->server->cdel(client->server);
+			break;
+		}
+		buff[len] = 0;
+		write(fd, buff, len);
+	}
 	close(fd);
 }

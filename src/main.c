@@ -35,15 +35,14 @@ static char	check_error(int argc, char **argv)
 
 int	main(int argc, char **argv)
 {
-	server_t	*server;
+	server_t	*server = init_server();
 
 	if (check_error(argc, argv))
 		return (84);
-	else if (strcmp(argv[1], "-help") == 0){
+	else if (strcasecmp(argv[1], "-help") == 0){
 		usage();
 		return (0);
 	}
-	server = init_server();
 	if (!server){
 		fprintf(stderr, "Impossible to initialise server\n");
 		return (84);

@@ -26,25 +26,32 @@ static char	*root_path(client_t *client)
 	return (new);
 }
 
+static char	*get_file(const char *root, const char *arg)
+{
+	char	*file;
+
+	if (!root || !arg)
+		return (0);
+	file = malloc(sizeof(char) * (strlen(root) + strlen(arg) + 2));
+	if (!file)
+		return (0);
+	strcat(file, root);
+	strcpy(file, "/");
+	strcpy(file, file);
+	return (file);
+}
+
 void	stor(client_t *client, const char *argv)
 {
 	int	fd;
 	char	*root = root_path(client);
-	char	*file;
+	char	*file = get_file(root, argv);
 
-	if (!root || !argv || !*argv 
+	if (!root || !argv || !*argv || !file
 	|| !client->data || !client->data->current){
 		write(client->fd, "550 Impossible to transfert\n", 28);
 		return;
 	}
-	file = malloc(sizeof(char) * (strlen(root) + strlen(argv) + 2));
-	if (!file){
-		write(client->fd, "550 Impossible to transfert\n", 28);
-		return;
-	}
-	strcat(file, root);
-	strcpy(file, "/");
-	strcpy(file, argv);
 	fd = open(file, O_RDONLY);
 	free(file);
 	if (fd != -1){

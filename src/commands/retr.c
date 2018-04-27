@@ -58,7 +58,7 @@ static void	send_data(client_t *client, int fd)
 	if (client->data->fd == client->data->current->fd)
 		write(client->fd, "150 File send\n", 14);
 	else
-		write(client->fd, "226 File send\n", 14);
+		write(client->fd, "200 File send\n", 14);
 	client->data->cdel(client->data);
 	client->data = 0;
 	close(fd);

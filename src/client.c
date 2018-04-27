@@ -99,11 +99,10 @@ void	reception_file(client_t *client)
 	char	buff[1025];
 	int	len;
 	int	fd;
-	char	*msg = "226 File transfered\n";
 
 	len = read(client->fd, &buff, 1024);
 	if (len == 0){
-		write(client->server->parent->fd, msg, strlen(msg));
+		write(client->server->parent->fd, "226 File transfered\n", 20);
 		client->server->parent->data = 0;
 		client->server->cdel(client->server);
 		return;

@@ -6,6 +6,7 @@
 */
 
 #include "server.h"
+
 int	start_server(server_t *server)
 {
 	int	result;

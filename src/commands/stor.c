@@ -53,7 +53,5 @@ void	stor(client_t *client, const char *argv)
 		return;
 	}
 	client->data->current->file = strdup(argv);
-	client->data->cdel(client->data);
-	client->data = 0;
 	write(client->fd, "150 Waiting data...\n", 20);
 }

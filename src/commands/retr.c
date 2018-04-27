@@ -56,9 +56,9 @@ static void	send_data(client_t *client, int fd)
 			write(client->data->current->fd, buff, strlen(buff));
 	}
 	if (client->data->fd == client->data->current->fd)
-		write(client->fd, "150 File send\n", 14);
+		write(client->fd, "250 File send\n", 14);
 	else
-		write(client->fd, "200 File send\n", 14);
+		write(client->fd, "226 File send\n", 14);
 	client->data->cdel(client->data);
 	client->data = 0;
 	close(fd);
@@ -71,7 +71,7 @@ void	retr(client_t *client, const char *argv)
 	char	*filename;
 
 	if (!client->data || !client->data->current){
-		write(client->fd, "425 Use PORT or PASV before\n", 28);
+		write(client->fd, "550 Use PORT or PASV before\n", 28);
 		return;
 	}
 	path = root_path(client);

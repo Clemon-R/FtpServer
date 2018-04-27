@@ -50,8 +50,7 @@ void	stor(client_t *client, const char *argv)
 
 	if (!root || !argv || !file
 	|| !client->data || !client->data->current){
-		write(client->fd, !root || !argv || !file ? "550" : "425", 3);
-		write(client->fd, " Impossible to transfert\n", 25);
+		write(client->fd, "550 Impossible to transfert\n", 28);
 		return;
 	}
 	fd = open(file, O_RDONLY);

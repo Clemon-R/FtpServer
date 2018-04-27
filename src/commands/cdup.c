@@ -15,6 +15,5 @@ void	cdup(client_t *client, const char *argv)
 		client->current = client->current->parent;
 		delete_path(tmp);
 	}
-	char	*msg = "250 Path successfully changed\n";
-	write(client->fd, msg, strlen(msg));
+	write(client->fd, "250 Path successfully changed\n", 30);
 }

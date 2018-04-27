@@ -112,7 +112,7 @@ void	cwd(client_t *client, const char *argv)
 		if (client->current)
 			delete_paths(client->current);
 		client->current = back_to_parent(decode_path(result));
-		write(client->fd, "250 Path changed\n", 18);
+		write(client->fd, "250 Path changed\n", 17);
 	}
 	else
 		write(client->fd, "550 Impossible to change path\n", 30);

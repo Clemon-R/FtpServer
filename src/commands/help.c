@@ -17,5 +17,5 @@ void	help(client_t *client, const char *argv)
 			, strlen(client->server->list[i].name));
 	}
 	write(client->fd, "\n", 1);
-	write(client->fd, "214 Help OK\n", 13);
+	write(client->fd, "214 Help OK\n", 12);
 }

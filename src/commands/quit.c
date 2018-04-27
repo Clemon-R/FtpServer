@@ -9,8 +9,6 @@
 
 void	quit(client_t *client, const char *arg)
 {
-	char	*msg = "221 Bye bye !\n";
-
-	write(client->fd, msg, strlen(msg));
+	write(client->fd, "221 Bye bye !\n", 14);
 	client->cdel(client);
 }

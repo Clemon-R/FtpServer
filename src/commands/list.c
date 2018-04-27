@@ -60,12 +60,12 @@ void	list(client_t *client, const char *argv)
 	char	*root = root_path(client);
 
 	if (!root || !client->data || !client->data->current){
-		write(client->fd, "550 Impossible to list files\n", 29);
+		write(client->fd, "250 Impossible to list files\n", 29);
 		return;
 	}
 	if (!send_data(client, root)){
 		free(root);
-		write(client->fd, "550 Impossible to list files\n", 29);
+		write(client->fd, "250 Impossible to list files\n", 29);
 		return;
 	}
 	free(root);

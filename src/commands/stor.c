@@ -47,9 +47,11 @@ void	stor(client_t *client, const char *argv)
 	char	*root = root_path(client);
 	char	*file = get_file(root, argv);
 
-	if (!root || !argv || !*argv || !file
+
+	if (!root || !argv || !file
 	|| !client->data || !client->data->current){
-		write(client->fd, "550 Impossible to transfert\n", 28);
+		write(client->fd, !root || !argv || !file ? "550" : "425", 3);
+		write(client->fd, " Impossible to transfert\n", 25);
 		return;
 	}
 	fd = open(file, O_RDONLY);

@@ -91,7 +91,7 @@ void	handle_command(server_t *server, client_t *client, char *buff)
 		}
 	}
 	if (client->account.logged)
-		write(client->fd, "500 Unknow command\n", 20);
+		write(client->fd, "500 Unknow command\n", 19);
 	else
-		write(client->fd, "530 Need to log in\n", 20);
+		write(client->fd, "530 Need to log in\n", 19);
 }

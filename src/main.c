@@ -50,7 +50,7 @@ int	main(int argc, char **argv)
 	server->cnew(server, argv[2], HOST);
 	if (server->set_port(server, atoi(argv[1]), "0.0.0.0")){
 		fprintf(stderr, "Port already use\n");
-		return(84);
+		return (84);
 	}
 	server->start(server);
 	server->cdel(server);

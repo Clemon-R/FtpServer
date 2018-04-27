@@ -108,7 +108,9 @@ void	reception_file(client_t *client)
 		len = read(client->fd, &buff, 1024);
 		if (len == 0){
 			write(client->server->parent->fd
-			, "226 File transfered\n", 20);
+			, client->server->fd == client->fd ? "226" : "150", 3);
+			write(client->server->parent->fd
+			, " File transfered\n", 17);
 			client->server->parent->data = 0;
 			client->server->cdel(client->server);
 			break;

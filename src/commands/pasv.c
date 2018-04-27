@@ -18,7 +18,7 @@ static void	set_msg(char *buff, client_t *client)
 	ip = inet_ntoa(client->server->s_in.sin_addr);
 	sprintf(buff, "227 Entering Passive Mode (%s,%d,%d)\n"
 		, ip, port / 256, port % 256);
-	for (int i = 0;buff[i];i++)
+	for (int i = 0;buff[i];i += 1)
 		if (buff[i] == '.')
 			buff[i] = ',';
 }

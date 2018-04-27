@@ -10,12 +10,9 @@
 
 static void	end_transit(client_t *client)
 {
-	write(client->server->parent->fd
-	, client->server->fd == client->fd ? "250" : "226", 3);
-	write(client->server->parent->fd
-	, " File transfered\n", 17);
 	client->server->parent->data = 0;
-	client->server->cdel(client->server);	
+	client->server->cdel(client->server);
+	write(client->server->parent->fd, "226 File transfered\n", 20);
 }
 
 void	reception_file(client_t *client)
@@ -25,7 +22,7 @@ void	reception_file(client_t *client)
 	int	fd = open(client->file, O_WRONLY | O_APPEND | O_CREAT, 0644);
 
 	if (fd == -1){
-		write(client->server->parent->fd, "250 Error file\n", 15);
+		write(client->server->parent->fd, "550 Error file\n", 15);
 		return;
 	}
 	while (len){

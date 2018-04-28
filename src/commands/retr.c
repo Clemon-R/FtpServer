@@ -46,14 +46,16 @@ static void	send_data(client_t *client, int fd)
 	char	buff[1024];
 	int	len = 1;
 
-	if (fd == -1)
+	if (fd == -1){
 		write(client->fd, "550 Permission denied\n", 22);
+		return;
+	}
 	write(client->fd, "150 Sendind file...\n", 20);
 	while (len > 0){
 		len = read(fd, buff, 1023);
 		buff[len] = 0;
 		if (len > 0)
-			write(client->data->current->fd, buff, strlen(buff));
+			write(client->data->current->fd, buff, len);
 	}
 	client->data->cdel(client->data);
 	client->data = 0;

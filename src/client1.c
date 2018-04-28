@@ -29,6 +29,7 @@ static int	create_client(client_t *client, int fd
 	client->current = 0;
 	client->s_in = socket;
 	client->data = 0;
+	client->file = 0;
 	if (client->server->type == HOST)
 		write(fd, welcome, strlen(welcome));
 }

@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <time.h>
+#include <stdio.h>
 
 static char	*root_path(client_t *client)
 {
@@ -33,24 +34,27 @@ static char	*root_path(client_t *client)
 
 static char	send_data(client_t *client, const char *root)
 {
-	DIR	*rep;
-	struct dirent	*file;
-	struct stat	st;
+	FILE	*fd;
+	char	*buff = 0;
+	size_t	size = 0;
+	char	*path = malloc(sizeof(char) * (strlen(root) + 7));
+	char	first = 1;
 
-	rep = opendir(root);
-	if (!rep)
+	strcpy(path, "ls -l ");
+	strcat(path, root);
+	fd = popen(path, "r");
+	free(path);
+	if (!fd)
 		return (0);
-	file = readdir(rep);
-	write(client->fd, "150 Here comes the directory listing.\n", 39);
-	while (file){
-		if (file->d_name[0] != '.'){
-			write(client->data->current->fd, file->d_name
-			, strlen(file->d_name));
-			write(client->data->current->fd, "\n", 1);
-		}
-		file = readdir(rep);
+	write(client->fd, "150 Here comes the directory listing.\n", 38);
+	while (getline(&buff, &size, fd) != -1){
+		if (!first)
+			write(client->data->current->fd, buff, strlen(buff));
+		first = 0;
+		//buff = 0;
+		//size = 0;
 	}
-	closedir(rep);
+	pclose(fd);
 	write(client->fd, "250 Directory send OK.\n", 23);
 	return (1);
 }
@@ -59,11 +63,11 @@ void	list(client_t *client, const char *argv)
 {
 	char	*root = root_path(client);
 
-	if (!root || !client->data || !client->data->current){
-		write(client->fd, "450 Impossible to list files\n", 29);
+	if (!client->data || !client->data->current){
+		write(client->fd, "425 Impossible to list files\n", 29);
 		return;
 	}
-	if (!send_data(client, root)){
+	if (!root || !send_data(client, root)){
 		free(root);
 		write(client->fd, "550 Impossible to list files\n", 29);
 		return;

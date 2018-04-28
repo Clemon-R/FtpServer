@@ -21,10 +21,6 @@ void	reception_file(client_t *client)
 	int	len = 1;
 	int	fd;
 
-	if (!client->file){
-		write(client->server->parent->fd, "550 Error file not found\n", 25);
-		return;
-	}
 	fd = open(client->file, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (fd == -1){
 		write(client->server->parent->fd, "550 Error file\n", 15);

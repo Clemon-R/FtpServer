@@ -51,11 +51,8 @@ static char	send_data(client_t *client, const char *root)
 		if (!first)
 			write(client->data->current->fd, buff, strlen(buff));
 		first = 0;
-		//buff = 0;
-		//size = 0;
 	}
 	pclose(fd);
-	write(client->fd, "250 Directory send OK.\n", 23);
 	return (1);
 }
 
@@ -72,6 +69,7 @@ void	list(client_t *client, const char *argv)
 		write(client->fd, "550 Impossible to list files\n", 29);
 		return;
 	}
+	write(client->fd, "250 Directory send OK.\n", 23);
 	free(root);
 	client->data->cdel(client->data);
 	client->data = 0;

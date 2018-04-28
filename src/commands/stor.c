@@ -48,8 +48,7 @@ void	stor(client_t *client, const char *argv)
 	char	*file = get_file(root, argv);
 
 
-	if (!root || !argv || !file
-	|| !client->data || !client->data->current){
+	if (!root || !argv || !file || !client->data || !client->data->current){
 		write(client->fd, !root || !argv || !file ? "550" : "425", 3);
 		write(client->fd, " Impossible to transfert\n", 25);
 		return;
@@ -61,6 +60,7 @@ void	stor(client_t *client, const char *argv)
 		return;
 	}
 	client->data->current->file = file;
-	write(client->fd, client->data->fd == client->data->current->fd ? "125" : "150", 3);
+	write(client->fd, client->data->fd == client->data->current->fd
+			? "125" : "150", 3);
 	write(client->fd, " Waiting data...\n", 17);
 }

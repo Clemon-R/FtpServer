@@ -35,9 +35,9 @@ static char	*get_file(const char *root, const char *arg)
 	file = malloc(sizeof(char) * (strlen(root) + strlen(arg) + 2));
 	if (!file)
 		return (0);
-	strcat(file, root);
-	strcpy(file, "/");
-	strcpy(file, file);
+	strcpy(file, root);
+	strcat(file, "/");
+	strcat(file, arg);
 	return (file);
 }
 
@@ -55,12 +55,12 @@ void	stor(client_t *client, const char *argv)
 		return;
 	}
 	fd = open(file, O_RDONLY);
-	free(file);
 	if (fd != -1){
 		write(client->fd, "550 File already exist\n", 23);
 		close(fd);
 		return;
 	}
-	client->data->current->file = strdup(argv);
-	write(client->fd, "150 Waiting data...\n", 20);
+	client->data->current->file = file;
+	write(client->fd, client->data->fd == client->data->current->fd ? "125" : "150", 3);
+	write(client->fd, " Waiting data...\n", 17);
 }

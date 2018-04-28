@@ -73,6 +73,7 @@ void	handle_packet_s(server_t *server, fd_set *readfts)
 	client_t	*current = server->current;
 	client_t	*next;
 
+	printf("Action\n");
 	while (current != 0){
 		next = current->next;
 		if (current->data && !current->data->current

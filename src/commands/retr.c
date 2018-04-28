@@ -50,7 +50,8 @@ static void	send_data(client_t *client, int fd)
 		write(client->fd, "550 Permission denied\n", 22);
 		return;
 	}
-	write(client->fd, "150 Sendind file...\n", 20);
+	write(client->fd, client->data->fd == client->data->current->fd ? "125" : "150", 3);
+	write(client->fd, " Sendind file...\n", 17);
 	while (len > 0){
 		len = read(fd, buff, 1023);
 		buff[len] = 0;

@@ -10,7 +10,7 @@ You just need to clone and compile this project.
 
 You just need to run
 ```
-./arcade port path_root
+./server port path_root
 ```
 
 ## Environements
